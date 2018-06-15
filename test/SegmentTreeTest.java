@@ -116,4 +116,11 @@ public class SegmentTreeTest {
         assertEquals("36 9 27 4 5 16 11 1 3 7 9 ", segTree.printTree());
     }
 
+    @Test
+    public void testSegmentTreeCaseLongestString() {
+        SegmentTree<String> segTree = new SegmentTree<>(new String[]{"aa", "a", "aaa", "aa", "aaaa", "a"});
+        segTree.buildSegmentTree((s1, s2) -> s1.length() > s2.length() ? s1 : s2);
+        assertEquals("aaaa aaa aaaa aa aaa aaaa a aa a aa aaaa ", segTree.printTree());
+    }
+
 }
