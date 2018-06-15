@@ -4,12 +4,17 @@ import java.util.function.BiFunction;
 public class SegmentTree<T> {
 
     private final T[] inputArray;
-    private final SegmentTreeNode[] segmentTree;
+    private final int segmentTreeSize;
+    private SegmentTreeNode[] segmentTree;
 
     SegmentTree(T[] input) {
         inputArray = Arrays.copyOf(input, input.length);
-        final int segTreeSize = computeSegTreeSize(input.length);
-        segmentTree = new SegmentTreeNode[segTreeSize];
+        segmentTreeSize = computeSegTreeSize(inputArray.length);
+    }
+
+    SegmentTree(T[] input, BiFunction<T, T, T> mergerFunction) {
+        this(input);
+        buildSegmentTree(mergerFunction);
     }
 
     protected static int computeSegTreeSize(int length) {
@@ -33,8 +38,13 @@ public class SegmentTree<T> {
     }
 
     public void buildSegmentTree(BiFunction<T, T, T> mergerFunction) {
+        initTree();
         int arraySize = inputArray.length;
         buildSegmentTree(0, 0, arraySize - 1, mergerFunction);
+    }
+
+    private void initTree() {
+        segmentTree = new SegmentTreeNode[segmentTreeSize];
     }
 
     private SegmentTreeNode<T> buildSegmentTree(int pos, int start, int end, BiFunction<T, T, T> mergerFunction) {
@@ -53,6 +63,9 @@ public class SegmentTree<T> {
     }
 
     public String printTree() {
+        if (segmentTree == null) {
+            return "Segment Tree is not built. Call buildSegmentTree";
+        }
         StringBuilder output = new StringBuilder();
         for (SegmentTreeNode treeNode : segmentTree) {
             if (treeNode != null) {

@@ -1,6 +1,6 @@
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class SegmentTreeTest {
 
@@ -121,6 +121,21 @@ public class SegmentTreeTest {
         SegmentTree<String> segTree = new SegmentTree<>(new String[]{"aa", "a", "aaa", "aa", "aaaa", "a"});
         segTree.buildSegmentTree((s1, s2) -> s1.length() > s2.length() ? s1 : s2);
         assertEquals("aaaa aaa aaaa aa aaa aaaa a aa a aa aaaa ", segTree.printTree());
+    }
+
+    @Test
+    public void testSegmentTreeCaseMultipleOperationOnSameInput() {
+        SegmentTree<Integer> segTree = new SegmentTree<>(new Integer[]{1, 2, 3, 4});
+        segTree.buildSegmentTree(Integer::max);
+        assertEquals("4 2 4 1 2 3 4 ", segTree.printTree());
+        segTree.buildSegmentTree(Integer::sum);
+        assertEquals("10 3 7 1 2 3 4 ", segTree.printTree());
+    }
+
+    @Test
+    public void testSegmentTreeWithMergerFunctionCaseSum() {
+        SegmentTree<Integer> segTree = new SegmentTree<>(new Integer[]{1, 3, 5, 7, 9, 11}, Integer::sum);
+        assertEquals("36 9 27 4 5 16 11 1 3 7 9 ", segTree.printTree());
     }
 
 }
